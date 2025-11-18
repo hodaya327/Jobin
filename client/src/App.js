@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "./App.css";
+import Logo from "./Logo";
 
 export default function App() {
   const [cvFile, setCvFile] = useState(null);
@@ -58,75 +59,88 @@ export default function App() {
   return (
     <div className="page">
       <div className="card">
-        <h1 className="title">CV Optimizer — Optimize for a specific job</h1>
-
-        <label className="label">
-          Upload your CV (PDF):
-          <input
-            type="file"
-            accept="application/pdf"
-            onChange={handleFileChange}
-            className="file-input"
-          />
-        </label>
-
-        <label className="label">
-          Paste job description:
-          <textarea
-            value={jobListing}
-            onChange={(e) => setJobListing(e.target.value)}
-            placeholder="Paste the full job description here..."
-            rows={8}
-            className="textarea"
-          />
-        </label>
-
-        {error && <div className="error">{error}</div>}
-
-        <div className="controls">
-          <button onClick={analyzeCV} disabled={loading} className="button">
-            {loading ? "Analyzing..." : "Analyze & Optimize"}
-          </button>
-
-          <button
-            onClick={() => {
-              setCvFile(null);
-              setJobListing("");
-              setResults(null);
-              setPdfFilename(null);
-              setError(null);
-            }}
-            className="button button-reset"
-          >
-            Reset
-          </button>
+        <div className="header">
+          <Logo />
+          <h1 className="title">Optimize your CV</h1>
+          <p className="subtitle">Upload your CV and job description to get personalized optimization suggestions</p>
         </div>
 
-        <div className="results-area">
-          {loading && <div className="loading">Processing... (this may take a few seconds)</div>}
-
-          {results && (
-            <div>
-              <h2>Analysis</h2>
-              <pre className="pre">{JSON.stringify(results, null, 2)}</pre>
+        <div className="content">
+          <div className="left-panel">
+            <div className="section">
+              <label className="label">Upload CV (PDF)</label>
+              <div className="file-input-wrapper">
+                <input
+                  type="file"
+                  accept="application/pdf"
+                  onChange={handleFileChange}
+                  className="file-input"
+                />
+                <div className="file-input-label">
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M14 10V12.6667C14 13.0203 13.8595 13.3594 13.6095 13.6095C13.3594 13.8595 13.0203 14 12.6667 14H3.33333C2.97971 14 2.64057 13.8595 2.39052 13.6095C2.14048 13.3594 2 13.0203 2 12.6667V10M11.3333 5.33333L8 2M8 2L4.66667 5.33333M8 2V10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                  {cvFile ? cvFile.name : "Choose file"}
+                </div>
+              </div>
             </div>
-          )}
 
-          {pdfFilename && (
-            <div className="download-row">
-              <div>Generated PDF: <strong>{pdfFilename.split("/").pop()}</strong></div>
-              <button onClick={downloadPDF} className="button">Download Improved PDF</button>
+            <div className="section">
+              <label className="label">Job Description</label>
+              <textarea
+                value={jobListing}
+                onChange={(e) => setJobListing(e.target.value)}
+                placeholder="Paste the job description here..."
+                className="textarea"
+              />
             </div>
-          )}
-        </div>
 
-        <div className="hint">
-          <strong>Notes:</strong>
-          <ul>
-            <li>This frontend assumes the backend is running at <code>http://localhost:3001</code> and exposes <code>POST /api/optimize-for-job</code> and <code>GET /api/download/:filename</code>.</li>
-            <li>Use FormData to send the file and the job description.</li>
-            <li>Enable CORS on the server for the frontend origin (e.g. http://localhost:3000).</li>
-          </ul>
+            {error && <div className="error">{error}</div>}
+
+            <div className="controls">
+              <button onClick={analyzeCV} disabled={loading} className="button">
+                {loading ? "Analyzing..." : "Analyze & Optimize"}
+              </button>
+
+              <button
+                onClick={() => {
+                  setCvFile(null);
+                  setJobListing("");
+                  setResults(null);
+                  setPdfFilename(null);
+                  setError(null);
+                }}
+                className="button button-reset"
+              >
+                Clear
+              </button>
+            </div>
+          </div>
+
+          <div className="right-panel">
+            <div className="results-area">
+              {loading && <div className="loading">Processing your CV... This may take a few moments</div>}
+
+              {results && (
+                <>
+                  <h2>Analysis Results</h2>
+                  <pre className="pre">{JSON.stringify(results, null, 2)}</pre>
+                </>
+              )}
+
+              {pdfFilename && (
+                <div className="download-row">
+                  <div>
+                    <strong>{pdfFilename.split("/").pop()}</strong>
+                    <div style={{ fontSize: '12px', color: '#667eea', marginTop: '4px' }}>
+                      Your optimized CV is ready
+                    </div>
+                  </div>
+                  <button onClick={downloadPDF} className="button">Download PDF</button>
+                </div>
+              )}
+            </div>
+          </div>
         </div>
       </div>
     </div>
