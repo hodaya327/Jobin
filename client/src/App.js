@@ -28,7 +28,7 @@ export default function App() {
       formData.append("cv", cvFile);
       formData.append("jobDescription", jobListing);
 
-      const res = await fetch("http://localhost:3000/optimize-for-job", {
+      const res = await fetch("http://localhost:3000/api/optimize-for-job", {
         method: "POST",
         body: formData,
       });
@@ -52,7 +52,7 @@ export default function App() {
   function downloadPDF() {
     if (!pdfFilename) return;
     const basename = pdfFilename.split("/").pop();
-    const url = `http://localhost:3000/download/${encodeURIComponent(basename)}`;
+    const url = `http://localhost:3000/api/download/${encodeURIComponent(basename)}`;
     window.open(url, "_blank");
   }
 
