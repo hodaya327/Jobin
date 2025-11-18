@@ -3,8 +3,9 @@ import cors from 'cors';
 import { analyzePDFAndCreateSong } from './pdf-analyze.js';
 
 const app = express();
-app.use(cors());
-
+app.use(cors({
+  origin: "http://localhost:3001",
+}));
 
 
 app.get('/analyze', async (req, res) => {
