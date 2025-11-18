@@ -1,4 +1,4 @@
-import { analyzeAndOptimizeCVService } from "../services/cvService.js";
+import { analyzeAndOptimizeCVService } from "../services/upload.service.js";
 
 export async function analyzeAndOptimizeCV(req, res) {
   try {
